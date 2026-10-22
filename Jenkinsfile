@@ -7,6 +7,18 @@ pipeline {
                 echo "Build Number: ${BUILD_NUMBER}"
             }
         }
+
+        stage('test') {
+            steps {
+                echo "running testing.."
+            }
+        }
+
+        stage('Deploying') {
+            steps {
+                echo "deploying.."
+            }
+        }
     }
 
 }

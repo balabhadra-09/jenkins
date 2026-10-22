@@ -21,11 +21,11 @@ pipeline {
         }
 
        
-// stage('Docker Build') {
-//     steps {
-//         bat '"C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t jenkins-demo:%BUILD_NUMBER% .'
-//     }
-// }
+stage('Docker Build') {
+    steps {
+        bat '"C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t jenkins-demo:%BUILD_NUMBER% .'
+    }
+}
 
 stage('Docker Test') {
     steps {

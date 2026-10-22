@@ -45,6 +45,9 @@ stage('Docker Hub Push') {
             powershell '''
                 $docker = "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe"
 
+                Write-Output "Docker username received: $env:DOCKER_USER"
+                Write-Output "Password received: $([bool]$env:DOCKER_PASS)"
+
                 $env:DOCKER_PASS | & $docker login -u $env:DOCKER_USER --password-stdin
                 if ($LASTEXITCODE -ne 0) { exit 1 }
 

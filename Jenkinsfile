@@ -34,6 +34,7 @@ stage('Docker Test') {
 }
 
 
+
 stage('Docker Hub Push') {
     steps {
         withCredentials([usernamePassword(
@@ -42,13 +43,12 @@ stage('Docker Hub Push') {
             passwordVariable: 'DOCKER_PASS'
         )]) {
             bat '''
-                echo %DOCKER_PASS% | "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" login -u %DOCKER_USER% --password-stdin
-                "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" tag jenkins-demo:%BUILD_NUMBER% %DOCKER_USER%/jenkins-demo:%BUILD_NUMBER%
-                "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" push %DOCKER_USER%/jenkins-demo:%BUILD_NUMBER%
+                "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" login -u "%DOCKER_USER%" --password-stdin < nul
             '''
         }
     }
 }
+
 
 
     }

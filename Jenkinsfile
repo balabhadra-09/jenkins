@@ -19,6 +19,12 @@ pipeline {
                 echo "deploying.."
             }
         }
+
+        stage('Docker Build') {
+            steps {
+                bat 'docker build -t jenkins-demo:%BUILD_NUMBER% .'
+            }
+        }
     }
 
 }

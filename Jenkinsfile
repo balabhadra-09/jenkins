@@ -48,7 +48,9 @@ stage('Docker Hub Push') {
                 Write-Output "Docker username received: $env:DOCKER_USER"
                 Write-Output "Password received: $([bool]$env:DOCKER_PASS)"
 
-                $env:DOCKER_PASS | & $docker login -u $env:DOCKER_USER --password-stdin
+                $password = $env:DOCKER_PASS.Trim()
+                $password | & $docker login -u $env:DOCKER_USER --password-stdin
+
                 if ($LASTEXITCODE -ne 0) { exit 1 }
 
                 & $docker tag "jenkins-demo:$env:BUILD_NUMBER" "$env:DOCKER_USER/jenkins-demo:$env:BUILD_NUMBER"

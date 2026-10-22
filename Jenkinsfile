@@ -43,7 +43,13 @@ stage('Docker Hub Push') {
             passwordVariable: 'DOCKER_PASS'
         )]) {
             bat '''
-                "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" login -u "%DOCKER_USER%" --password-stdin < nul
+                @echo off
+                "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" login -u "%DOCKER_USER%" --password-stdin <<< "%DOCKER_PASS%"
+                if errorlevel 1 exit /b 1
+                "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" tag jenkins-demo:%BUILD_NUMBER% %DOCKER_USER%/jenkins-demo:%BUILD_NUMBER%
+                if errorlevel 1 exit /b 1
+                "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" push %DOCKER_USER%/jenkins-demo:%BUILD_NUMBER%
+                if errorlevel 1 exit /b 1
             '''
         }
     }

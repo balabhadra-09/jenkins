@@ -40,6 +40,7 @@ pipeline {
 // }
 
 
+
 stage('Docker-Push') {
     steps {
         withCredentials([usernamePassword(
@@ -49,13 +50,14 @@ stage('Docker-Push') {
         )]) {
             sh '''
                 echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
-                docker tag jenkins-app:${BUILD_NUMBER} YOUR_DOCKERHUB_USERNAME/jenkins-app:${BUILD_NUMBER}
-                docker push YOUR_DOCKERHUB_USERNAME/jenkins-app:${BUILD_NUMBER}
+                docker tag jenkins-app:${BUILD_NUMBER} balabhadra12/jenkins-app:${BUILD_NUMBER}
+                docker push balabhadra12/jenkins-app:${BUILD_NUMBER}
                 docker logout
             '''
         }
     }
 }
+
 
 
 

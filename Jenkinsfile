@@ -1,5 +1,6 @@
+
 pipeline {
-    agent any 
+    agent any
 
     stages {
         stage('Build Number') {
@@ -20,22 +21,11 @@ pipeline {
             }
         }
 
-       
-       stage('Docker-Build') {
-        steps {
-            echo "Building Docker Image..."
-            sh 'docker build -t jenkins-app:${BUILD_NUMBER} .'
+        stage('Docker-Build') {
+            steps {
+                echo "Building Docker Image..."
+                sh 'docker build -t jenkins-app:${BUILD_NUMBER} .'
+            }
         }
-       
-
-
-
-
- 
-
- 
-
-
     }
-
 }

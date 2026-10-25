@@ -33,10 +33,11 @@ stage('Docker Test') {
     }
 }
 
+
 stage('Docker Hub Push') {
     steps {
         withCredentials([usernamePassword(
-            credentialsId: 'dockerhub-creds',
+            credentialsId: 'dockerhub-creds-new',
             usernameVariable: 'DOCKER_USER',
             passwordVariable: 'DOCKER_PASS'
         )]) {
@@ -55,6 +56,7 @@ stage('Docker Hub Push') {
         }
     }
 }
+
 
     }
 

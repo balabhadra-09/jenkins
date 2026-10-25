@@ -34,37 +34,6 @@ stage('Docker Test') {
 }
 
 
-
-stage('Docker Hub Push') {
-    steps {
-        withCredentials([usernamePassword(
-            credentialsId: 'dockerhub-creds',
-            usernameVariable: 'DOCKER_USER',
-            passwordVariable: 'DOCKER_PASS'
-        )]) {
-            powershell '''
-                $docker = "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe"
-
-                Write-Output "Docker username received: $env:DOCKER_USER"
-                Write-Output "Password received: $([bool]$env:DOCKER_PASS)"
-
-                $password = $env:DOCKER_PASS.Trim()
-                $password | & $docker login -u $env:DOCKER_USER --password-stdin
-
-                if ($LASTEXITCODE -ne 0) { exit 1 }
-
-                & $docker tag "jenkins-demo:$env:BUILD_NUMBER" "$env:DOCKER_USER/jenkins-demo:$env:BUILD_NUMBER"
-                if ($LASTEXITCODE -ne 0) { exit 1 }
-
-                & $docker push "$env:DOCKER_USER/jenkins-demo:$env:BUILD_NUMBER"
-                if ($LASTEXITCODE -ne 0) { exit 1 }
-            '''
-        }
-    }
-}
-
-
-
     }
 
 }

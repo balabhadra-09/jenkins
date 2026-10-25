@@ -34,35 +34,9 @@ stage('Docker Test') {
 }
 
 
-// stage('Docker Hub Push') {
-//     steps {
-//         withCredentials([usernamePassword(
-//             credentialsId: 'dockerhub-creds-new',
-//             usernameVariable: 'DOCKER_USER',
-//             passwordVariable: 'DOCKER_PASS'
-//         )]) {
-//             powershell '''
-//                 $docker = "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe"
-//                 $password = $env:DOCKER_PASS.Trim()
-//                 $password | & $docker login -u $env:DOCKER_USER --password-stdin
-//                 if ($LASTEXITCODE -ne 0) { exit 1 }
+ 
 
-//                 & $docker tag "jenkins-demo:$env:BUILD_NUMBER" "$env:DOCKER_USER/jenkins-demo:$env:BUILD_NUMBER"
-//                 if ($LASTEXITCODE -ne 0) { exit 1 }
-
-//                 & $docker push "$env:DOCKER_USER/jenkins-demo:$env:BUILD_NUMBER"
-//                 if ($LASTEXITCODE -ne 0) { exit 1 }
-//             '''
-//         }
-//     }
-// }
-
-stage('Kubernetes Deploy') {
-    steps {
-        bat 'kubectl set image deployment/my-node-app my-node-app=balabhadra12/jenkins-demo:%BUILD_NUMBER% -n default'
-        bat 'kubectl rollout status deployment/my-node-app -n default'
-    }
-}
+ 
 
 
     }

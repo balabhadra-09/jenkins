@@ -29,15 +29,34 @@ pipeline {
         }
 
         
-stage('Docker-Run') {
+// stage('Docker-Run') {
+//     steps {
+//         echo "Running Docker Container..."
+//         sh '''
+//             docker rm -f jenkins-app-container || true
+//             docker run -d --name jenkins-app-container -p 8081:80 jenkins-app:${BUILD_NUMBER}
+//         '''
+//     }
+// }
+
+
+stage('Docker-Push') {
     steps {
-        echo "Running Docker Container..."
-        sh '''
-            docker rm -f jenkins-app-container || true
-            docker run -d --name jenkins-app-container -p 8081:80 jenkins-app:${BUILD_NUMBER}
-        '''
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-creds',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_TOKEN'
+        )]) {
+            sh '''
+                echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+                docker tag jenkins-app:${BUILD_NUMBER} YOUR_DOCKERHUB_USERNAME/jenkins-app:${BUILD_NUMBER}
+                docker push YOUR_DOCKERHUB_USERNAME/jenkins-app:${BUILD_NUMBER}
+                docker logout
+            '''
+        }
     }
 }
+
 
 
         

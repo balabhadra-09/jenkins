@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -28,39 +27,44 @@ pipeline {
             }
         }
 
-        
-// stage('Docker-Run') {
-//     steps {
-//         echo "Running Docker Container..."
-//         sh '''
-//             docker rm -f jenkins-app-container || true
-//             docker run -d --name jenkins-app-container -p 8081:80 jenkins-app:${BUILD_NUMBER}
-//         '''
-//     }
-// }
+        // stage('Docker-Run') {
+        //     steps {
+        //         echo "Running Docker Container..."
+        //         sh '''
+        //             docker rm -f jenkins-app-container || true
+        //             docker run -d --name jenkins-app-container -p 8081:80 jenkins-app:${BUILD_NUMBER}
+        //         '''
+        //     }
+        // }
 
-
-
-stage('Docker-Push') {
-    steps {
-        withCredentials([usernamePassword(
-            credentialsId: 'dockerhub-creds',
-            usernameVariable: 'DOCKER_USER',
-            passwordVariable: 'DOCKER_TOKEN'
-        )]) {
-            sh '''
-                echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
-                docker tag jenkins-app:${BUILD_NUMBER} balabhadra12/jenkins-app:${BUILD_NUMBER}
-                docker push balabhadra12/jenkins-app:${BUILD_NUMBER}
-                docker logout
-            '''
+        stage('Docker-Debug') {
+            steps {
+                sh '''
+                    whoami
+                    which docker
+                    docker version
+                    docker images | grep jenkins-app
+                '''
+            }
         }
-    }
-}
 
-
-
-
-        
+        stage('Docker-Push') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_TOKEN'
+                )]) {
+                    sh '''
+                        export DOCKER_CONFIG=$WORKSPACE/.docker
+                        mkdir -p $DOCKER_CONFIG
+                        echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker tag jenkins-app:${BUILD_NUMBER} balabhadra12/jenkins-app:${BUILD_NUMBER}
+                        docker push balabhadra12/jenkins-app:${BUILD_NUMBER}
+                        docker logout
+                    '''
+                }
+            }
+        }
     }
 }

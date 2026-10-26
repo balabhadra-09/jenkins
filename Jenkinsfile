@@ -43,5 +43,17 @@ pipeline {
                 }
             }
         }
+
+
+
+        stage('Deploy-K8s') {
+          steps {
+            sh '''
+            kubectl apply -f k8s/service.yaml
+            sed "s/IMAGE_TAG/${BUILD_NUMBER}/g" k8s/deployment.yaml | kubectl apply -f -
+            kubectl rollout status deployment/jenkins-app --timeout=120s
+             '''
+    }
+}
     }
 }

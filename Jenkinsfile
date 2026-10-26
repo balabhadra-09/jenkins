@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        PATH = "C:\\Users\\beher\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;${env.PATH}"
-    }
-
     stages {
         stage('Build Number') {
             steps {
@@ -27,7 +23,7 @@ pipeline {
         stage('Docker-Build') {
             steps {
                 echo "Building Docker Image...."
-                bat "docker build -t jenkins-app:%BUILD_NUMBER% ."
+                sh 'docker build -t jenkins-app:${BUILD_NUMBER} .'
             }
         }
 
@@ -38,10 +34,10 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_TOKEN'
                 )]) {
-                    bat '''
-                        echo %DOCKER_TOKEN%| docker login -u %DOCKER_USER% --password-stdin
-                        docker tag jenkins-app:%BUILD_NUMBER% balabhadra12/jenkins-app:%BUILD_NUMBER%
-                        docker push balabhadra12/jenkins-app:%BUILD_NUMBER%
+                    sh '''
+                        echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker tag jenkins-app:${BUILD_NUMBER} balabhadra12/jenkins-app:${BUILD_NUMBER}
+                        docker push balabhadra12/jenkins-app:${BUILD_NUMBER}
                         docker logout
                     '''
                 }
